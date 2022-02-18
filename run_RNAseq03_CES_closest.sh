@@ -13,13 +13,13 @@
 
 module load bedtools2
 #Sort rlog-normalized reads by DE group
-bedtools intersect -wa -c -a ../RNA/RNAseq_htseq0_rlog_normalized.bed -b bed/nonDE.all.bed bed/F.all.bed bed/M.all.bed | awk '$13 == "0"' | awk '$1 == "2L";$1 == "2R";$1 == "3L";$1 == "3R";$1 == "X"' | cut -f 1-4 > dmel-all-r6.27.all.expressed.Noloop.bed
+bedtools intersect -wa -c -a ../RNA/RNAseq_htseq_rlog_normalized.bed -b bed/nonDE.all.bed bed/F.all.bed bed/M.all.bed | awk '$13 == "0"' | awk '$1 == "2L";$1 == "2R";$1 == "3L";$1 == "3R";$1 == "X"' | cut -f 1-4 > dmel-all-r6.27.all.expressed.Noloop.bed
 
-bedtools intersect -wa -c -a ../RNA/RNAseq_htseq0_rlog_normalized.bed -b bed/nonDE.all.bed bed/F.all.bed bed/M.all.bed | awk '$13 != "0"' | awk '$1 == "2L";$1 == "2R";$1 == "3L";$1 == "3R";$1 == "X"' | cut -f 1-4 > dmel-all-r6.27.all.expressed.nonDE.bed
+bedtools intersect -wa -c -a ../RNA/RNAseq_htseq_rlog_normalized.bed -b bed/nonDE.all.bed bed/F.all.bed bed/M.all.bed | awk '$13 != "0"' | awk '$1 == "2L";$1 == "2R";$1 == "3L";$1 == "3R";$1 == "X"' | cut -f 1-4 > dmel-all-r6.27.all.expressed.nonDE.bed
 
-bedtools intersect -wa -c -a ../RNA/RNAseq_htseq0_rlog_normalized.bed -b bed/F.all.bed | awk '$13 != "0"' | awk '$1 == "2L";$1 == "2R";$1 == "3L";$1 == "3R";$1 == "X"' | cut -f 1-4 > dmel-all-r6.27.all.expressed.F.bed
+bedtools intersect -wa -c -a ../RNA/RNAseq_htseq_rlog_normalized.bed -b bed/F.all.bed | awk '$13 != "0"' | awk '$1 == "2L";$1 == "2R";$1 == "3L";$1 == "3R";$1 == "X"' | cut -f 1-4 > dmel-all-r6.27.all.expressed.F.bed
 
-bedtools intersect -wa -c -a ../RNA/RNAseq_htseq0_rlog_normalized.bed -b bed/M.all.bed | awk '$13 != "0"' | awk '$1 == "2L";$1 == "2R";$1 == "3L";$1 == "3R";$1 == "X"' | cut -f 1-4 > dmel-all-r6.27.all.expressed.M.bed
+bedtools intersect -wa -c -a ../RNA/RNAseq_htseq_rlog_normalized.bed -b bed/M.all.bed | awk '$13 != "0"' | awk '$1 == "2L";$1 == "2R";$1 == "3L";$1 == "3R";$1 == "X"' | cut -f 1-4 > dmel-all-r6.27.all.expressed.M.bed
 
 #Measure distance from X genes +/- R-loops to CES
 bedtools sort -i dmel-all-r6.27.all.expressed.Noloop.bed | bedtools closest -d -a - -b ~/Reference/dmel_r6_CES2.bed | awk '$1 == "X"' | sort -k 9,9n | awk {'print "Noloop\t"$4"\t"$9'} > Noloop_CES_closest.txt
