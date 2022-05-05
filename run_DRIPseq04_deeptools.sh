@@ -8,7 +8,7 @@
 #SBATCH --cpus-per-task=8            # Cores per task (>1 if multithread tasks)
 #SBATCH --mem=120G                   # Real memory (RAM) required (MB)
 
-#SBATCH --time=2:00:00              # Total run time limit (HH:MM:SS)
+#SBATCH --time=12:00:00              # Total run time limit (HH:MM:SS)
 #SBATCH --output=deeptools.%N.%j.out     # STDOUT output file
 #SBATCH --error=deeptools.%N.%j.err      # STDERR output file (optional)
 #SBATCH --export=ALL                 # Export you current env to the job env
@@ -48,25 +48,25 @@ done
 
 #computeMatrix-DE.expressed.gtf, plot metaprofiles
 #All genic R-loops, consensus peakset, autosomes vs X
-computeMatrix scale-regions --transcriptID mrna --skipZeros -p 20 -S 5.merged.bw 6.merged.bw 3.merged.bw 4.merged.bw -R dsA.diff.autosomes.expressed.gtf dsA.diff.X.expressed.gtf -b 1000 -a 1000 -o profile1.gz --regionBodyLength 3000 --samplesLabel M379 M732 F379 F732 --binSize 50 >& computeMatrix.log
+computeMatrix scale-regions --transcriptID mrna --skipZeros -p 20 -S 3.merged.bw 4.merged.bw 5.merged.bw 6.merged.bw -R dsA.diff.autosomes.expressed.gtf dsA.diff.X.expressed.gtf -b 1000 -a 1000 -o dprofile.gz --regionBodyLength 3000 --samplesLabel F379 F732 M379 M732 --binSize 50 >& computeMatrix.log
 
-plotProfile -m profile1.gz --colors black red -out vMF_DRIPseq_Adults_diff_line.png
-plotHeatmap -m profile1.gz --colors black red -out vMF_DRIPseq_Adults_diff_tornado.png
-
-#Female genic peaks
-computeMatrix scale-regions --transcriptID mrna --skipZeros -p 20 -S 3.merged.bw 4.merged.bw 5.merged.bw 6.merged.bw -R dsA.Females.all.expressed.gtf -b 1000 -a 1000 -o F.profile2.gz --regionBodyLength 3000 --samplesLabel F379 F732 M379 M732 --binSize 50 >& computeMatrix.log
-
-plotProfile -m F.profile2.gz --yMin -0.3 --yMax 0.9 -out DRIPseq_Female_merged_peaks_body_line.png
-plotHeatmap -m F.profile2.gz --yMin -0.3 --yMax 0.9 --zMin -2.2 --zMax 2.3 -out DRIPseq_Female_merged_peaks_body_tornado.png --legendLocation none
-
-#Male genic peaks
-computeMatrix scale-regions --transcriptID mrna --skipZeros -p 20 -S 3.merged.bw 4.merged.bw 5.merged.bw 6.merged.bw -R dsA.Males.all.expressed.gtf -b 1000 -a 1000 -o M.profile3.gz --regionBodyLength 3000 --samplesLabel F379 F732 M379 M732 --binSize 50 >& computeMatrix.log
-
- plotProfile -m M.profile3.gz --yMin -0.3 --yMax 0.9 -out DRIPseq_Male_merged_peaks_body_line.png
-plotHeatmap -m M.profile3.gz --yMin -0.3 --yMax 0.9 --zMin -2.2 --zMax 2.3 -out DRIPseq_Male_merged_peaks_body_tornado.png --legendLocation none
+plotProfile -m dprofile.gz --colors black red --plotType se --legendLocation best -out DRIPseq_Diff_merged_peaks_bycond_line_se.png
+plotProfile -m dprofile.gz --perGroup --plotType se --legendLocation best -out DRIPseq_Diff_merged_peaks_overlap_line_se.png
 
 #nonDE genic peaks
 computeMatrix scale-regions --transcriptID mrna --skipZeros -p 20 -S 3.merged.bw 4.merged.bw 5.merged.bw 6.merged.bw -R dsA.nonDE.all.expressed.gtf -b 1000 -a 1000 -o N.profile4.gz --regionBodyLength 3000 --samplesLabel F379 F732 M379 M732 --binSize 50 >& computeMatrix.log
 
-plotProfile -m N.profile4.gz --yMin -0.3 --yMax 0.9 -out DRIPseq_nonDE_merged_peaks_body_line.png
-plotHeatmap -m N.profile4.gz --yMin -0.3 --yMax 0.9 --zMin -2.2 --zMax 2.3 -out DRIPseq_nonDE_merged_peaks_body_tornado.png --legendLocation none
+plotProfile -m N.profile.gz --plotType se --legendLocation best -out DRIPseq_nonDE_merged_peaks_bycond_line_se.png
+plotProfile -m N.profile.gz --perGroup --plotType se --legendLocation best -out DRIPseq_nonDE_merged_peaks_overlap_line_se.png
+
+#Female genic peaks
+computeMatrix scale-regions --transcriptID mrna --skipZeros -p 20 -S 3.merged.bw 4.merged.bw 5.merged.bw 6.merged.bw -R dsA.Females.all.expressed.gtf -b 1000 -a 1000 -o F.profile2.gz --regionBodyLength 3000 --samplesLabel F379 F732 M379 M732 --binSize 50 >& computeMatrix.log
+
+plotProfile -m F.profile.gz --plotType se --legendLocation best -out DRIPseq_FE_merged_peaks_bycond_line_se.png
+plotProfile -m F.profile.gz --perGroup --plotType se --legendLocation best -out DRIPseq_Diff_FE_peaks_overlap_line_se.png
+
+#Male genic peaks
+computeMatrix scale-regions --transcriptID mrna --skipZeros -p 20 -S 3.merged.bw 4.merged.bw 5.merged.bw 6.merged.bw -R dsA.Males.all.expressed.gtf -b 1000 -a 1000 -o M.profile.gz --regionBodyLength 3000 --samplesLabel F379 F732 M379 M732 --binSize 50 >& computeMatrix.log
+
+plotProfile -m M.profile.gz --plotType se --legendLocation best -out DRIPseq_ME_merged_peaks_bycond_line_se.png
+plotProfile -m M.profile.gz --perGroup --plotType se --legendLocation best -out DRIPseq_ME_merged_peaks_overlap_line_se.png
